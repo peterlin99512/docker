@@ -1,4 +1,4 @@
-FROM postgres:12.2
+FROM postgres:11.8
 ARG VERSION=9.2.4
 LABEL maintainer="Citus Data https://citusdata.com" \
       org.label-schema.name="Citus" \
