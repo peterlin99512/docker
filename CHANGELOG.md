@@ -1,3 +1,6 @@
+### citus-docker v9.5.1.docker (January 26, 2021) ###
+* Bump pg version back to 12.5
+
 ### citus-docker v9.5.1.docker (December 3, 2020) ###
 
 * Bump Citus version to 9.5.1
