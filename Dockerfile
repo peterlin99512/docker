@@ -1,4 +1,4 @@
-FROM postgres:12.5
+FROM postgres:13
 ARG VERSION=9.5.1
 LABEL maintainer="Citus Data https://citusdata.com" \
       org.label-schema.name="Citus" \
@@ -11,15 +11,18 @@ LABEL maintainer="Citus Data https://citusdata.com" \
 
 ENV CITUS_VERSION ${VERSION}.citus-1
 
+COPY postgresql13citus.deb  /
+
 # install Citus
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        ca-certificates \
        curl \
     && curl -s https://install.citusdata.com/community/deb.sh | bash \
-    && apt-get install -y postgresql-$PG_MAJOR-citus-9.5.=$CITUS_VERSION \
-                          postgresql-$PG_MAJOR-hll=2.15.citus-1 \
+    && dpkg -i  postgresql13citus.deb \
+    && apt-get install -y postgresql-$PG_MAJOR-hll=2.15.citus-1 \
                           postgresql-$PG_MAJOR-topn=2.3.1 \
+                              postgresql-$PG_MAJOR-hll=2.15.citus-1 \
     && apt-get purge -y --auto-remove curl \
     && rm -rf /var/lib/apt/lists/*
 
