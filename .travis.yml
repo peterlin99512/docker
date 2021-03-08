@@ -12,6 +12,7 @@ jobs:
   include:
     - stage: build-image
       name: "latest"
+      script: docker build -f Dockerfile .
     - stage: build-image
       name: "postgres-12"
       script: docker build -f citus_pg_12.dockerfile .
