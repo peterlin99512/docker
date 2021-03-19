@@ -18,7 +18,7 @@ jobs:
       script: docker build -f postgres-12/Dockerfile .
     - stage: build-image
       name: "alpine"
-      script: docker build -f Dockerfile-alpine .
+      script: docker build -f alpine/Dockerfile .
     - stage: build-image
       name: "nightly"
       script: docker build -f nightly/Dockerfile .
