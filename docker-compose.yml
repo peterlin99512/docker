@@ -18,12 +18,12 @@ services:
     depends_on: [ manager ]
     environment: *AUTH
     command: "/wait-for-manager.sh"
-    volumes: 
+    volumes:
       - healthcheck-volume:/healthcheck
   manager:
     container_name: "${COMPOSE_PROJECT_NAME:-citus}_manager"
     image: 'citusdata/membership-manager:0.3.0'
-    volumes: 
+    volumes:
       - "${DOCKER_SOCK:-/var/run/docker.sock}:/var/run/docker.sock"
       - healthcheck-volume:/healthcheck
     depends_on: [ master ]
