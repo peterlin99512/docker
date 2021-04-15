@@ -1,0 +1,29 @@
+name: Update Version on Docker Files
+
+env:
+  PRJ_VER: ${{ github.event.inputs.project_version }}
+
+
+
+on:
+ workflow_dispatch:
+    inputs:
+      project_version:
+        description: 'Version number to be released e.g 10.0.3'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: sudo apt install libcurl4-openssl-dev libssl-dev
+
+      - name: Clone Tools branch
+        run: git clone --branch tools-transition-update-docker https://github.com/citusdata/tools.git
+        
+      - name: Install Python requirements
+        run: python -m pip install -r tools/python/requirements.txt
+        
+      - name: Update Docker Files
+        run: python -m python.update_docker --prj_ver ${PRJ_VER}
