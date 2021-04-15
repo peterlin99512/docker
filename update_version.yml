@@ -1,7 +1,7 @@
 name: Update Version on Docker Files
 
 env:
-  PRJ_VER: ${{ github.event.inputs.project_version }}
+  PROJECT_VERSION: ${{ github.event.inputs.project_version }}
 
 
 
