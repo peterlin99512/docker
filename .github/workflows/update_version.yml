@@ -3,13 +3,12 @@ name: Update Version on Docker Files
 env:
   PRJ_VER: ${{ github.event.inputs.project_version }}
 
-
-
 on:
  workflow_dispatch:
     inputs:
       project_version:
         description: 'Version number to be released e.g 10.0.3'
+
 jobs:
   build:
     runs-on: ubuntu-latest
