@@ -25,3 +25,4 @@ jobs:
         run: python -m pip install -r tools/packaging_automation/requirements.txt
 
       - name: Build and Publish Docker Images
+        run: python -m  tools.packaging_automation.publish_docker  --pipeline_trigger_type "${GITHUB_EVENT_NAME}" --exec_path "$(pwd)" --image_type ${{ matrix.image_type }}
