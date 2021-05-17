@@ -25,4 +25,4 @@ jobs:
         run: export PYTHONPATH="$(pwd)/tools" && python -m pip install -r tools/packaging_automation/requirements.txt
         
       - name: Update Docker Files
-        run: python -m python.update_docker --prj_ver ${PRJ_VER}
+        run: python -m tools.packaging_automation.update_docker --prj_ver ${PRJ_VER}
