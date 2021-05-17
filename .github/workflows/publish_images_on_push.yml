@@ -9,7 +9,7 @@ on:
       -
 jobs:
 
-  uild_and_publish_images:
+  build_and_publish_images:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
