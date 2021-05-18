@@ -1,4 +1,4 @@
-name: Schedule Build Docker Images For Main Images And Nightly
+name: Cron job for building and publishing Docker images
 
 on:
   schedule:
