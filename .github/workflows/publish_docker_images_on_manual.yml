@@ -32,4 +32,4 @@ jobs:
       - name: Build and Publish Docker Images
         run: |
             python -m  tools.packaging_automation.publish_docker  --pipeline_trigger_type "${GITHUB_EVENT_NAME}" --exec_path "$(pwd)" --image_type ${{ matrix.image_type }} \
-            --tag_name ${{ github.event.inputs.tag_name }} --manual-trigger-type ${{ github.event.inputs.tag_name }}
+            --tag_name ${{ github.event.inputs.tag_name }} --manual_trigger_type ${{ github.event.inputs.tag_name }}
