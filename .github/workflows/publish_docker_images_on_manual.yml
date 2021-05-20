@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       trigger_type:
-        description: "Type of build which you want to trigger. Allowed values: main,tags,nightly"
+        description: "Type of build which you want to trigger. Allowed values: main, tags, nightly"
       tag_name:
         description: "The tag name on the project repo to be released. It is mandatory if you select the trigger_type as 'tags' "
         default: ""
@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Clone  tools
-        run: git clone https://github.com/citusdata/tools.git --branch tools-transition-update-docker --single-branch tools
+        run: git clone --depth=1 --branch tools-transition-update-docker https://github.com/citusdata/tools.git tools
 
       - name: install dependencies
         run: sudo apt install libcurl4-openssl-dev libssl-dev
