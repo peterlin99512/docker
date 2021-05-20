@@ -15,8 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix:
-        image_type: [ latest,alpine,postgres_12,nightly ]
     steps:
       - uses: actions/checkout@v2
 
@@ -31,5 +29,5 @@ jobs:
 
       - name: Build and Publish Docker Images
         run: |
-            python -m  tools.packaging_automation.publish_docker  --pipeline_trigger_type "${GITHUB_EVENT_NAME}" --exec_path "$(pwd)" --image_type ${{ matrix.image_type }} \
+            python -m  tools.packaging_automation.publish_docker  --pipeline_trigger_type "${GITHUB_EVENT_NAME}" --exec_path "$(pwd)"  \
             --tag_name ${{ github.event.inputs.tag_name }} --manual_trigger_type ${{ github.event.inputs.trigger_type }}
