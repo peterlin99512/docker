@@ -13,16 +13,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
       - uses: actions/checkout@v2
 
-      - name: Install dependencies
+      - name: Install package dependencies
         run: sudo apt install libcurl4-openssl-dev libssl-dev
 
-      - name: Clone Tools branch
+      - name: Clone tools branch
         run: git clone --branch tools-transition-update-docker https://github.com/citusdata/tools.git
         
-      - name: Install Python requirements
+      - name: Install python requirements
         run: export PYTHONPATH="$(pwd)/tools" && python -m pip install -r tools/packaging_automation/requirements.txt
         
-      - name: Update Docker Files
+      - name: Update docker files
         run: python -m tools.packaging_automation.update_docker --prj_ver ${PRJ_VER}
