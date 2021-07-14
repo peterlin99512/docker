@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Clone tools branch
-        run: git clone --depth=1 --branch tools-transition-update-docker https://github.com/citusdata/tools.git tools
+        run: git clone --depth=1 --branch develop https://github.com/citusdata/tools.git tools
 
       - name: Install package dependencies
         run: sudo apt install libcurl4-openssl-dev libssl-dev
@@ -30,5 +30,6 @@ jobs:
 
       - name: Build and publish docker images
         run: |
-            python -m  tools.packaging_automation.publish_docker  --pipeline_trigger_type "${GITHUB_EVENT_NAME}" --exec_path "$(pwd)"  \
-            --tag_name ${{ github.event.inputs.tag_name }} --manual_trigger_type ${{ github.event.inputs.trigger_type }}
+            python -m  tools.packaging_automation.publish_docker  --pipeline_trigger_type "${GITHUB_EVENT_NAME}" \
+            --exec_path "$(pwd)" --tag_name ${{ github.event.inputs.tag_name }} \
+            --manual_trigger_type ${{ github.event.inputs.trigger_type }}
