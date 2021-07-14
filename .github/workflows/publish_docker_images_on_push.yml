@@ -1,9 +1,12 @@
-name: Schedule Build Docker Images For Main Images And Nightly
+name: Build Docker Image On Push (Both Tags and Branches)
 
 on:
-  schedule:
-    - cron: '*/10 * * * *'
-
+  push:
+    branches:
+      - '**'
+    tags:
+      - '**'
+      -
 jobs:
 
   build_and_publish_images:
@@ -11,10 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image_type: [ latest,
-                      alpine,
-                      postgres_12,
-                      nightly ]
+        image_type: [latest,alpine,postgres_12 ]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -30,5 +30,5 @@ jobs:
 
       - name: Build and publish docker images
         run: |
-          python -m  tools.packaging_automation.publish_docker  --pipeline_trigger_type "${GITHUB_EVENT_NAME}"\
-          --exec_path "$(pwd)" --image_type ${{ matrix.image_type }}
+              python -m  tools.packaging_automation.publish_docker --github_ref "${GITHUB_REF}" \
+              --pipeline_trigger_type "${GITHUB_EVENT_NAME}" --exec_path "$(pwd)" --image_type ${{ matrix.image_type }}
