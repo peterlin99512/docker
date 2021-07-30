@@ -2,7 +2,7 @@ name: Schedule Build Docker Images For Main Images And Nightly
 
 on:
   schedule:
-    - cron: '*/10 * * * *'
+    - cron: 30 0 * * *
 
 jobs:
 
@@ -33,5 +33,7 @@ jobs:
 
       - name: Build and publish docker images
         run: |
-          python -m  tools.packaging_automation.publish_docker  --pipeline_trigger_type "${GITHUB_EVENT_NAME}"\
-          --exec_path "$(pwd)" --image_type ${{ matrix.image_type }}
+          python -m  tools.packaging_automation.publish_docker \
+          --pipeline_trigger_type "${GITHUB_EVENT_NAME}" \
+          --github_ref ""${GITHUB_REF}" \
+          --image_type ${{ matrix.image_type }}
