@@ -33,6 +33,7 @@ jobs:
 
       - name: Build and publish docker images
         run: |
-            python -m  tools.packaging_automation.publish_docker  --pipeline_trigger_type "${GITHUB_EVENT_NAME}" \
-             --tag_name ${{ github.event.inputs.tag_name }} \
+            python -m  tools.packaging_automation.publish_docker  \
+            --pipeline_trigger_type "${GITHUB_EVENT_NAME}" \
+            --tag_name ${{ github.event.inputs.tag_name }} \
             --manual_trigger_type ${{ github.event.inputs.trigger_type }}

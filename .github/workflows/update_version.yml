@@ -26,5 +26,7 @@ jobs:
         
       - name: Update docker files
         run: |
-          python -m tools.packaging_automation.update_docker --prj_ver ${{ github.event.inputs.project_version }} \
-          --gh-token ${{ secrets.GH_TOKEN }} --postgres_version ${{ github.event.inputs.postgres_version }}
+          python -m tools.packaging_automation.update_docker \
+          --prj_ver ${{ github.event.inputs.project_version }} \
+          --gh-token ${{ secrets.GH_TOKEN }} \
+          --postgres_version ${{ github.event.inputs.postgres_version }}
