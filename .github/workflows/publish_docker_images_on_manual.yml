@@ -5,12 +5,15 @@ on:
     inputs:
       trigger_type:
         description: "Type of build which you want to trigger. Allowed values: main, tags, nightly"
+        required: true
       tag_name:
         description: "The tag name on the project repo to be released. It is mandatory if you select the trigger_type as 'tags' "
+        required: false
         default: ""
 
 jobs:
   build_and_publish_images:
+    name: Build and publish images
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -35,4 +38,5 @@ jobs:
           python -m  tools.packaging_automation.publish_docker  \
           --pipeline_trigger_type "${GITHUB_EVENT_NAME}" \
           --tag_name ${{ github.event.inputs.tag_name }} \
-          --manual_trigger_type ${{ github.event.inputs.trigger_type }}
+          --manual_trigger_type ${{ github.event.inputs.trigger_type }} \
+          --github_ref "${GITHUB_REF}"
