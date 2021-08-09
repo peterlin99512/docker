@@ -19,12 +19,28 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Install package dependencies
+        run: sudo apt install libcurl4-openssl-dev libssl-dev
+
+      - name: Clone tools branch
+        run: git clone -b v0.8.0 --depth=1  https://github.com/citusdata/tools.git tools
+
+      - name: Install python requirements
+        run: export PYTHONPATH="$(pwd)/tools" && python -m pip install -r tools/packaging_automation/requirements.txt
+
       - name: Print postgres version
         run: echo "${POSTGRES_VERSION}"
 
       - name: Update docker files
         run: |
-          if [[ "1" == "1" ]]
+          if [[ -z "${POSTGRES_VERSION}" ]]
           then
-            echo "Postgres Empty"
+            python -m tools.packaging_automation.update_docker \
+            --prj_ver ${{ github.event.inputs.project_version }} \
+            --gh_token "${GH_TOKEN}"
+          else
+            python -m tools.packaging_automation.update_docker \
+            --prj_ver ${{ github.event.inputs.project_version }} \
+            --gh_token "${GH_TOKEN}" \
+            --postgres_version "${POSTGRES_VERSION}"
           fi
