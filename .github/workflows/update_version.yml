@@ -30,7 +30,7 @@ jobs:
 
       - name: Update docker files
         run: |
-          if [ -z "${POSTGRES_VERSION}" ] then \
+          if [ "1" == "1" ] then \
             echo "Postgres Empty" \
           else \
            echo "Postgres not Empty" \
