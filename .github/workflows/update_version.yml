@@ -26,6 +26,4 @@ jobs:
         run: |
           if [ "1" == "1" ] then
             echo "Postgres Empty"
-          else
-           echo "Postgres not Empty"
           fi
