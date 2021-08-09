@@ -33,14 +33,7 @@ jobs:
 
       - name: Update docker files
         run: |
-          if [[ -z "${POSTGRES_VERSION}" ]]
-          then
-            python -m tools.packaging_automation.update_docker \
-            --prj_ver ${{ github.event.inputs.project_version }} \
-            --gh_token "${GH_TOKEN}"
-          else
-            python -m tools.packaging_automation.update_docker \
-            --prj_ver ${{ github.event.inputs.project_version }} \
-            --gh_token "${GH_TOKEN}" \
-            --postgres_version "${POSTGRES_VERSION}"
-          fi
+          python -m tools.packaging_automation.update_docker \
+          --prj_ver ${{ github.event.inputs.project_version }} \
+          --gh_token "${GH_TOKEN}" \
+          --postgres_version "${POSTGRES_VERSION}"
