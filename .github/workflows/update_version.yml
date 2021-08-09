@@ -13,7 +13,8 @@ on:
         description: "Postgres version number. If it is empty, postgres version will not be changed"
 
 jobs:
-  build:
+  update_docker_files:
+    name: "Update docker files"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -37,5 +38,5 @@ jobs:
           --prj_ver ${{ github.event.inputs.project_version }} \
           --gh_token "${GH_TOKEN}" \
           --pipeline \
-          -- exec_path "${pwd}" \
+          --exec_path "${pwd}" \
           --postgres_version "${POSTGRES_VERSION}"
