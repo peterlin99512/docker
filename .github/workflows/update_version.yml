@@ -30,7 +30,7 @@ jobs:
 
       - name: Update docker files
         run: |
-          if [["${POSTGRES_VERSION}"]] then
+          if [["${POSTGRES_VERSION}"]] then \
             python -m tools.packaging_automation.update_docker \
             --prj_ver ${{ github.event.inputs.project_version }} \
             --gh-token ${{ secrets.GH_TOKEN }} \
@@ -39,4 +39,4 @@ jobs:
             python -m tools.packaging_automation.update_docker \
             --prj_ver ${{ github.event.inputs.project_version }} \
             --gh-token ${{ secrets.GH_TOKEN }} \
-          fi
+          fi \
