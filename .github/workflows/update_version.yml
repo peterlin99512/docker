@@ -11,6 +11,12 @@ on:
       postgres_version:
         required: false
         description: "Postgres version number. If it is empty, postgres version will not be changed"
+      microsoft_email:
+        description: "Email to be written on changelogs"
+        default: "gindibay@microsoft.com"
+      name:
+        description: "Name to be written on changelogs"
+        default: "Gurkan Indibay"
 
 jobs:
   update_docker_files:
@@ -25,6 +31,11 @@ jobs:
 
       - name: Clone tools branch
         run: git clone -b issue_147 --depth=1  https://github.com/citusdata/tools.git tools
+
+      - name: Set git name and email
+        run: |
+          git config --global user.email "${{ github.event.inputs.microsoft_email }}" && \
+          git config --global user.name "${{ github.event.inputs.name }}"
 
       - name: Install python requirements
         run: export PYTHONPATH="$(pwd)/tools" && python -m pip install -r tools/packaging_automation/requirements.txt
