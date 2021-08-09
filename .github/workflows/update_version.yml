@@ -28,6 +28,9 @@ jobs:
       - name: Install python requirements
         run: export PYTHONPATH="$(pwd)/tools" && python -m pip install -r tools/packaging_automation/requirements.txt
 
+      - name: Print postgres version
+        run: echo "${POSTGRES_VERSION}"
+
       - name: Update docker files
         run: |
           if [ -z "${POSTGRES_VERSION}" ] then \
