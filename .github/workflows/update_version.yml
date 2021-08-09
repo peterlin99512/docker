@@ -38,5 +38,5 @@ jobs:
           --prj_ver ${{ github.event.inputs.project_version }} \
           --gh_token "${GH_TOKEN}" \
           --pipeline \
-          --exec_path "${pwd}" \
+          --exec_path "$(pwd)" \
           --postgres_version "${POSTGRES_VERSION}"
