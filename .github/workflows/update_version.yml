@@ -25,9 +25,6 @@ jobs:
       - name: Clone tools branch
         run: git clone -b v0.8.0 --depth=1  https://github.com/citusdata/tools.git tools
 
-      - name: Install python requirements
-        run: export PYTHONPATH="$(pwd)/tools" && python -m pip install -r tools/packaging_automation/requirements.txt
-
       - name: Print postgres version
         run: echo "${POSTGRES_VERSION}"
 
