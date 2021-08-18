@@ -1,6 +1,7 @@
 ### citus-docker v10.1.2.docker (August 18,2021) ###
 
 * Bump Citus version to 10.1.2
+* Bump PG versions to 13.4 and 12.8
 
 ### citus-docker v10.1.1.docker (August 06,2021) ###
 
