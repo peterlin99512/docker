@@ -2,6 +2,10 @@
 
 * Bump Citus version to 10.1.1
 
+### citus-docker v10.1.1.docker (August 20,2021) ###
+
+* Bump Citus version to 10.1.1
+
 ### citus-docker v10.1.2.docker (August 18,2021) ###
 
 * Bump Citus version to 10.1.2
