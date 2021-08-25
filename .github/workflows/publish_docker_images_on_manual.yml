@@ -7,7 +7,7 @@ on:
         description: "Type of build which you want to trigger. Allowed values: main, tags, nightly"
         required: true
       tag_name:
-        description: "The tag name on the project repo to be released. It is mandatory if you select the trigger_type as 'tags' "
+        description: "The tag name on the project repo to be released. It is mandatory if you select the trigger_type as 'tags'"
         required: false
         default: ""
 
