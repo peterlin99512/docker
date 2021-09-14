@@ -21,11 +21,15 @@ Since Citus is intended for use within a cluster, there are many ways to deploy 
 If you just want to run a single Citus instance, it’s pretty easy to get started:
 
 ```bash
-docker run --name citus_standalone -p 5432:5432 citusdata/citus
+docker run --name citus_standalone -p 5432:5432 -e POSTGRES_PASSWORD=<postgres_password> citusdata/citus
 ```
 
-You should now be able to connect to `127.0.0.1` on port `5432` using e.g. `psql` to run a few commands (see the Citus documentation for more information).
+You should change '<postgres_password>' with a password you want. You should now be able to connect to `127.0.0.1` on port `5432` using e.g. `psql` to run a few commands (see the Citus documentation for more information).
 
+```bash
+psql -h 127.0.0.1 -p 5442 -U postgres
+```
+Password will be requested and you should enter the password you provided as parameter 'POSTGRES_PASSWORD' in the previous step (<postgres_password>)
 As with the PostgreSQL image, the default `PGDATA` directory will be mounted as a volume, so it will persist between restarts of the container. But while the above _will_ get you a running Citus instance, it won’t have any workers to exercise distributed query planning. For that, you may wish to try the included [`docker-compose.yml`][compose-config] configuration.
 
 #### Nightly Image
