@@ -1,3 +1,4 @@
+
 # This file is auto generated from it's template,
 # see citusdata/tools/packaging_automation/templates/docker/latest/latest.tmpl.dockerfile.
 FROM postgres:14rc1
