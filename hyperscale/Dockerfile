@@ -43,9 +43,16 @@ RUN echo "shared_preload_libraries='citus,pg_cron,pg_stat_statements'" >> /usr/s
 RUN echo "cron.database_name = 'postgres'" >> /usr/share/postgresql/postgresql.conf.sample
 
 # add scripts to run after initdb
-COPY 001-create-citus-extension.sql /docker-entrypoint-initdb.d/
-COPY 002-create-postgis-extension.sql /docker-entrypoint-initdb.d/
-COPY 003-other-extensions.sql /docker-entrypoint-initdb.d/
+COPY hyperscale/001-extension_functions.sql /docker-entrypoint-initdb.d/
+COPY hyperscale/002-db-user-creation.sql /docker-entrypoint-initdb.d/
+COPY hyperscale/003-create-citus-extension.sql /docker-entrypoint-initdb.d/
+COPY hyperscale/004-create-postgis-extension.sql /docker-entrypoint-initdb.d/
+COPY hyperscale/005-other-extensions.sql /docker-entrypoint-initdb.d/
+COPY hyperscale/006-grants.sql /docker-entrypoint-initdb.d/
+
+
+
+
 
 # add health check script
 COPY pg_healthcheck wait-for-manager.sh /
