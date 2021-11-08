@@ -12,6 +12,7 @@ LABEL maintainer="Citus Data https://citusdata.com" \
       org.label-schema.schema-version="1.0"
 
 ENV CITUS_VERSION ${VERSION}.citus-1
+ENV POSTGRES_DB citus
 
 # install Citus
 RUN apt-get update \
@@ -40,11 +41,11 @@ RUN apt-get -y install postgresql-14-cron
 RUN echo "shared_preload_libraries='citus,pg_cron,pg_stat_statements'" >> /usr/share/postgresql/postgresql.conf.sample
 
 # add pg_cron into default PostgreSQL config
-RUN echo "cron.database_name = 'postgres'" >> /usr/share/postgresql/postgresql.conf.sample
+RUN echo "cron.database_name = 'citus'" >> /usr/share/postgresql/postgresql.conf.sample
 
 # add scripts to run after initdb
-COPY hyperscale/001-create_extension_functions.sql /docker-entrypoint-initdb.d/
-COPY hyperscale/002-db-user-creation.sql /docker-entrypoint-initdb.d/
+COPY hyperscale/001-db-user-creation.sql /docker-entrypoint-initdb.d/
+COPY hyperscale/002-create_extension_functions.sql /docker-entrypoint-initdb.d/
 COPY hyperscale/003-create_citus_extension.sql /docker-entrypoint-initdb.d/
 COPY hyperscale/004-postgres_replication_origins.sql /docker-entrypoint-initdb.d/
 COPY hyperscale/005-create_postgis_extension.sql /docker-entrypoint-initdb.d/
