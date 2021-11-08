@@ -1,3 +1,4 @@
+--source https://msdata.visualstudio.com/Database%20Systems/_git/CitusMigration?path=/instance/lib/create_extension_function.sql
 CREATE OR REPLACE FUNCTION public.create_extension(extname text)
  RETURNS void
  LANGUAGE plpgsql

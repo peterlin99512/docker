@@ -43,12 +43,16 @@ RUN echo "shared_preload_libraries='citus,pg_cron,pg_stat_statements'" >> /usr/s
 RUN echo "cron.database_name = 'postgres'" >> /usr/share/postgresql/postgresql.conf.sample
 
 # add scripts to run after initdb
-COPY hyperscale/001-extension_functions.sql /docker-entrypoint-initdb.d/
+COPY hyperscale/001-create_extension_functions.sql /docker-entrypoint-initdb.d/
 COPY hyperscale/002-db-user-creation.sql /docker-entrypoint-initdb.d/
-COPY hyperscale/003-create-citus-extension.sql /docker-entrypoint-initdb.d/
-COPY hyperscale/004-create-postgis-extension.sql /docker-entrypoint-initdb.d/
-COPY hyperscale/005-other-extensions.sql /docker-entrypoint-initdb.d/
-COPY hyperscale/006-grants.sql /docker-entrypoint-initdb.d/
+COPY hyperscale/003-create_citus_extension.sql /docker-entrypoint-initdb.d/
+COPY hyperscale/004-postgres_replication_origins.sql /docker-entrypoint-initdb.d/
+COPY hyperscale/005-create_postgis_extension.sql /docker-entrypoint-initdb.d/
+COPY hyperscale/006-other_extensions.sql /docker-entrypoint-initdb.d/
+COPY hyperscale/007-pg_cron_pg_partman_setup.sql /docker-entrypoint-initdb.d/
+COPY hyperscale/008-grant_usage_fdw.sql /docker-entrypoint-initdb.d/
+COPY hyperscale/009-other_grants.sql /docker-entrypoint-initdb.d/
+COPY hyperscale/010-stat_statements_reset.sql /docker-entrypoint-initdb.d/
 
 
 
