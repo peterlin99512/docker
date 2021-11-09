@@ -36,10 +36,10 @@ RUN apt-get update \
                          postgresql-14-mysql-fdw \
                          postgresql-14-cron
 
-# add citus to default PostgreSQL config
+# set shared_preload_libraries to the list of extensions that needs to be loaded when postgresql starts
 RUN echo "shared_preload_libraries='citus,pg_cron,pg_stat_statements'" >> /usr/share/postgresql/postgresql.conf.sample
 
-# add pg_cron into default PostgreSQL config
+# set default database name for pg_cron extension
 RUN echo "cron.database_name = 'citus'" >> /usr/share/postgresql/postgresql.conf.sample
 
 # add scripts to run after initdb
@@ -54,10 +54,8 @@ COPY hyperscale/008-grant_usage_fdw.sql /docker-entrypoint-initdb.d/
 COPY hyperscale/009-other_grants.sql /docker-entrypoint-initdb.d/
 COPY hyperscale/010-stat_statements_reset.sql /docker-entrypoint-initdb.d/
 
-
 # add health check script
 COPY pg_healthcheck wait-for-manager.sh /
-
 
 RUN chmod +x /wait-for-manager.sh
 
