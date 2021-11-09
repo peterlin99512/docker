@@ -1,6 +1,4 @@
 CREATE EXTENSION hstore;
-CREATE EXTENSION plperlu;
-CREATE EXTENSION jsonb_plperlu;
 CREATE EXTENSION pg_freespacemap;
 CREATE EXTENSION tdigest;
 CREATE EXTENSION btree_gin;
