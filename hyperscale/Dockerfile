@@ -14,7 +14,7 @@ LABEL maintainer="Citus Data https://citusdata.com" \
 ENV CITUS_VERSION ${VERSION}.citus-1
 ENV POSTGRES_DB citus
 
-# install Citus
+# install Citus and needed extension on hyperscale
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        ca-certificates \
@@ -23,18 +23,17 @@ RUN apt-get update \
     && apt-get install -y postgresql-$PG_MAJOR-citus-10.2=$CITUS_VERSION \
                           postgresql-$PG_MAJOR-hll=2.16.citus-1 \
                           postgresql-$PG_MAJOR-topn=2.4.0 \
+                          postgresql-14-postgis-3 \
+                          postgresql-plperl-14 \
+                          postgresql-contrib \
+                          postgresql-14-partman \
+                          postgresql-14-tdigest \
+                          postgresql-14-mysql-fdw \
+                          postgresql-14-cron \
     && apt-get purge -y --auto-remove curl \
     && rm -rf /var/lib/apt/lists/*
 
-# install other extensions
-RUN apt-get update \
-    &&apt-get install -y postgresql-14-postgis-3 \
-                         postgresql-plperl-14 \
-                         postgresql-contrib \
-                         postgresql-14-partman \
-                         postgresql-14-tdigest \
-                         postgresql-14-mysql-fdw \
-                         postgresql-14-cron
+
 
 # set shared_preload_libraries to the list of extensions that needs to be loaded when postgresql starts
 RUN echo "shared_preload_libraries='citus,pg_cron,pg_stat_statements'" >> /usr/share/postgresql/postgresql.conf.sample
@@ -61,7 +60,7 @@ RUN chmod +x /wait-for-manager.sh
 
 # This block is required to be able to define the password for user citus. With the below script citus password can be
 # set using 'CITUS_PASSWORD' env variable set in docker run phase
-RUN apt-get install sudo && adduser postgres sudo
+RUN apt-get update && apt-get install -y  sudo && adduser postgres sudo
 RUN echo 'postgres     ALL=(ALL) NOPASSWD:ALL' >> '/etc/sudoers'
 ARG CITUS_PWD_COMMAND='\\tsudo sed "s\/###CITUS_PASSWORD###\/${CITUS_PASSWORD}\/g" -i \/docker-entrypoint-initdb.d\/001-db-user-creation.sql\n'
 RUN sed "/# if first arg looks like a flag.*/a ${CITUS_PWD_COMMAND}" -i /usr/local/bin/docker-entrypoint.sh
