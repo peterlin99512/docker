@@ -27,15 +27,14 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # install other extensions
-RUN     apt-get update \
-      &&apt-get install -y postgresql-14-postgis-3 \
-            postgresql-plperl-14 \
-            postgresql-contrib \
-            postgresql-14-partman \
-            postgresql-14-tdigest \
-            postgresql-14-mysql-fdw
-
-RUN apt-get -y install postgresql-14-cron
+RUN apt-get update \
+    &&apt-get install -y postgresql-14-postgis-3 \
+                         postgresql-plperl-14 \
+                         postgresql-contrib \
+                         postgresql-14-partman \
+                         postgresql-14-tdigest \
+                         postgresql-14-mysql-fdw \
+                         postgresql-14-cron
 
 # add citus to default PostgreSQL config
 RUN echo "shared_preload_libraries='citus,pg_cron,pg_stat_statements'" >> /usr/share/postgresql/postgresql.conf.sample
@@ -56,15 +55,22 @@ COPY hyperscale/009-other_grants.sql /docker-entrypoint-initdb.d/
 COPY hyperscale/010-stat_statements_reset.sql /docker-entrypoint-initdb.d/
 
 
-
-
-
 # add health check script
 COPY pg_healthcheck wait-for-manager.sh /
+
+
 RUN chmod +x /wait-for-manager.sh
+
+# This block is required to be able to define the password for user citus. With the below script citus password can be
+# set using 'CITUS_PASSWORD' env variable set in docker run phase
+RUN apt-get install sudo && adduser postgres sudo
+RUN echo 'postgres     ALL=(ALL) NOPASSWD:ALL' >> '/etc/sudoers'
+ARG CITUS_PWD_COMMAND='\\tsudo sed "s\/###CITUS_PASSWORD###\/${CITUS_PASSWORD}\/g" -i \/docker-entrypoint-initdb.d\/001-db-user-creation.sql\n'
+RUN sed "/# if first arg looks like a flag.*/a ${CITUS_PWD_COMMAND}" -i /usr/local/bin/docker-entrypoint.sh
 
 # entry point unsets PGPASSWORD, but we need it to connect to workers
 # https://github.com/docker-library/postgres/blob/33bccfcaddd0679f55ee1028c012d26cd196537d/12/docker-entrypoint.sh#L303
 RUN sed "/unset PGPASSWORD/d" -i /usr/local/bin/docker-entrypoint.sh
 
 HEALTHCHECK --interval=4s --start-period=6s CMD ./pg_healthcheck
+

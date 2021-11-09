@@ -1,3 +1,3 @@
-create user citus with encrypted password 'Citus123';
+CREATE USER citus WITH ENCRYPTED PASSWORD '###CITUS_PASSWORD###';
 ALTER DATABASE citus OWNER TO citus;
 

@@ -1,14 +1,3 @@
--- partman schema and grants per resource https://github.com/pgpartman/pg_partman
--- CREATE ROLE partman WITH LOGIN;
--- CREATE SCHEMA partman;
--- CREATE EXTENSION pg_partman SCHEMA partman;
--- GRANT ALL ON ALL TABLES IN SCHEMA partman TO partman;
--- GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA partman TO partman;
--- GRANT EXECUTE ON ALL PROCEDURES IN SCHEMA partman TO partman;
--- GRANT ALL ON SCHEMA citus TO partman;
--- GRANT TEMPORARY ON DATABASE citus to partman;
--- GRANT CREATE ON DATABASE citus TO partman;
-
 GRANT EXECUTE ON FUNCTION create_extension(text) TO citus WITH GRANT OPTION;
 GRANT EXECUTE ON FUNCTION drop_extension(text) TO citus WITH GRANT OPTION;
 GRANT ALL ON SCHEMA public TO citus WITH GRANT OPTION;
