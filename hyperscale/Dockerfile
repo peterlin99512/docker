@@ -33,8 +33,6 @@ RUN apt-get update \
     && apt-get purge -y --auto-remove curl \
     && rm -rf /var/lib/apt/lists/*
 
-
-
 # set shared_preload_libraries to the list of extensions that needs to be loaded when postgresql starts
 RUN echo "shared_preload_libraries='citus,pg_cron,pg_stat_statements'" >> /usr/share/postgresql/postgresql.conf.sample
 
