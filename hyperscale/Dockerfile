@@ -53,8 +53,6 @@ COPY hyperscale/009-stat_statements_reset.sql /docker-entrypoint-initdb.d/
 # add health check script
 COPY pg_healthcheck wait-for-manager.sh /
 
-RUN chmod +x /wait-for-manager.sh
-
 RUN chown -R postgres:postgres /docker-entrypoint-initdb.d
 
 ARG CITUS_PWD_COMMAND='\\tsed "s\/###CITUS_PASSWORD###\/${POSTGRES_PASSWORD}\/g" -i \/docker-entrypoint-initdb.d\/001-db-user-creation.sql\n'
