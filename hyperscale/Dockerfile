@@ -44,23 +44,20 @@ COPY hyperscale/001-db-user-creation.sql /docker-entrypoint-initdb.d/
 COPY hyperscale/002-create_extension_functions.sql /docker-entrypoint-initdb.d/
 COPY hyperscale/003-create_citus_extension.sql /docker-entrypoint-initdb.d/
 COPY hyperscale/004-postgres_replication_origins.sql /docker-entrypoint-initdb.d/
-COPY hyperscale/005-create_postgis_extension.sql /docker-entrypoint-initdb.d/
-COPY hyperscale/006-other_extensions.sql /docker-entrypoint-initdb.d/
-COPY hyperscale/007-pg_cron_pg_partman_setup.sql /docker-entrypoint-initdb.d/
-COPY hyperscale/008-grant_usage_fdw.sql /docker-entrypoint-initdb.d/
-COPY hyperscale/009-other_grants.sql /docker-entrypoint-initdb.d/
-COPY hyperscale/010-stat_statements_reset.sql /docker-entrypoint-initdb.d/
+COPY hyperscale/005-other_extensions.sql /docker-entrypoint-initdb.d/
+COPY hyperscale/006-pg_cron_pg_partman_setup.sql /docker-entrypoint-initdb.d/
+COPY hyperscale/007-grant_usage_fdw.sql /docker-entrypoint-initdb.d/
+COPY hyperscale/008-other_grants.sql /docker-entrypoint-initdb.d/
+COPY hyperscale/009-stat_statements_reset.sql /docker-entrypoint-initdb.d/
 
 # add health check script
 COPY pg_healthcheck wait-for-manager.sh /
 
 RUN chmod +x /wait-for-manager.sh
 
-# This block is required to be able to define the password for user citus. With the below script citus password can be
-# set using 'CITUS_PASSWORD' env variable set in docker run phase
-RUN apt-get update && apt-get install -y  sudo && adduser postgres sudo
-RUN echo 'postgres     ALL=(ALL) NOPASSWD:ALL' >> '/etc/sudoers'
-ARG CITUS_PWD_COMMAND='\\tsudo sed "s\/###CITUS_PASSWORD###\/${CITUS_PASSWORD}\/g" -i \/docker-entrypoint-initdb.d\/001-db-user-creation.sql\n'
+RUN chown -R postgres:postgres /docker-entrypoint-initdb.d
+
+ARG CITUS_PWD_COMMAND='\\tsed "s\/###CITUS_PASSWORD###\/${POSTGRES_PASSWORD}\/g" -i \/docker-entrypoint-initdb.d\/001-db-user-creation.sql\n'
 RUN sed "/# if first arg looks like a flag.*/a ${CITUS_PWD_COMMAND}" -i /usr/local/bin/docker-entrypoint.sh
 
 # entry point unsets PGPASSWORD, but we need it to connect to workers
