@@ -13,6 +13,7 @@ LABEL maintainer="Citus Data https://citusdata.com" \
 
 ENV CITUS_VERSION ${VERSION}.citus-1
 ENV POSTGRES_DB citus
+ENV PGDATA /data
 
 # install Citus and needed extension on hyperscale
 RUN apt-get update \
@@ -49,18 +50,22 @@ COPY hyperscale/006-pg_cron_pg_partman_setup.sql /docker-entrypoint-initdb.d/
 COPY hyperscale/007-grant_usage_fdw.sql /docker-entrypoint-initdb.d/
 COPY hyperscale/008-other_grants.sql /docker-entrypoint-initdb.d/
 COPY hyperscale/009-stat_statements_reset.sql /docker-entrypoint-initdb.d/
+COPY hyperscale/pg_hba.conf /pg_hba.conf
 
 # add health check script
 COPY pg_healthcheck wait-for-manager.sh /
 
 RUN chown -R postgres:postgres /docker-entrypoint-initdb.d
 
-ARG CITUS_PWD_COMMAND='\\tsed "s\/###CITUS_PASSWORD###\/${POSTGRES_PASSWORD}\/g" -i \/docker-entrypoint-initdb.d\/001-db-user-creation.sql\n'
+ARG CITUS_PWD_COMMAND='\\tsed "s\/###CITUS_PASSWORD###\/${CITUS_PASSWORD}\/g" -i \/docker-entrypoint-initdb.d\/001-db-user-creation.sql\n'
 RUN sed "/# if first arg looks like a flag.*/a ${CITUS_PWD_COMMAND}" -i /usr/local/bin/docker-entrypoint.sh
+RUN sed "/file_env().*/i export POSTGRES_PASSWORD=$(echo $RANDOM | md5sum | head -c 20;)" -i /usr/local/bin/docker-entrypoint.sh
 
 # entry point unsets PGPASSWORD, but we need it to connect to workers
 # https://github.com/docker-library/postgres/blob/33bccfcaddd0679f55ee1028c012d26cd196537d/12/docker-entrypoint.sh#L303
-RUN sed "/unset PGPASSWORD/d" -i /usr/local/bin/docker-entrypoint.sh
+RUN sed "/unset PGPASSWORD/a cp \/pg_hba.conf ${PGDATA}\/pg_hba.conf" -i /usr/local/bin/docker-entrypoint.sh
+#RUN sed "/unset PGPASSWORD/d" -i /usr/local/bin/docker-entrypoint.sh
+
 
 HEALTHCHECK --interval=4s --start-period=6s CMD ./pg_healthcheck
 
