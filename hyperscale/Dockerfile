@@ -1,6 +1,6 @@
 # This file is auto generated from it's template,
 # see citusdata/tools/packaging_automation/templates/docker/latest/latest.tmpl.dockerfile.
-FROM postgres:14.0
+FROM postgres:14.1
 ARG VERSION=10.2.2
 LABEL maintainer="Citus Data https://citusdata.com" \
       org.label-schema.name="Citus" \
@@ -57,9 +57,11 @@ COPY pg_healthcheck wait-for-manager.sh /
 
 RUN chown -R postgres:postgres /docker-entrypoint-initdb.d
 
-ARG CITUS_PWD_COMMAND='\\tsed "s\/###CITUS_PASSWORD###\/${CITUS_PASSWORD}\/g" -i \/docker-entrypoint-initdb.d\/001-db-user-creation.sql\n'
-RUN sed "/# if first arg looks like a flag.*/a ${CITUS_PWD_COMMAND}" -i /usr/local/bin/docker-entrypoint.sh
-RUN sed "/file_env().*/i export POSTGRES_PASSWORD=$(echo $RANDOM | md5sum | head -c 20;)" -i /usr/local/bin/docker-entrypoint.sh
+#ARG CITUS_PWD_COMMAND='\\tsed "s\/###CITUS_PASSWORD###\/${CITUS_PASSWORD}\/g" -i \/docker-entrypoint-initdb.d\/001-db-user-creation.sql\n'
+#RUN sed "/# if first arg looks like a flag.*/a ${CITUS_PWD_COMMAND}" -i /usr/local/bin/docker-entrypoint.sh
+#RUN sed "/file_env().*/i export POSTGRES_PASSWORD=$(echo $RANDOM | md5sum | head -c 20;)" -i /usr/local/bin/docker-entrypoint.sh
+
+COPY hyperscale/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
 # entry point unsets PGPASSWORD, but we need it to connect to workers
 # https://github.com/docker-library/postgres/blob/33bccfcaddd0679f55ee1028c012d26cd196537d/12/docker-entrypoint.sh#L303
