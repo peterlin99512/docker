@@ -50,6 +50,8 @@ COPY hyperscale/006-pg_cron_pg_partman_setup.sql /docker-entrypoint-initdb.d/
 COPY hyperscale/007-grant_usage_fdw.sql /docker-entrypoint-initdb.d/
 COPY hyperscale/008-other_grants.sql /docker-entrypoint-initdb.d/
 COPY hyperscale/009-stat_statements_reset.sql /docker-entrypoint-initdb.d/
+
+# copy access rules for postgres
 COPY hyperscale/pg_hba.conf /pg_hba.conf
 
 # add health check script
