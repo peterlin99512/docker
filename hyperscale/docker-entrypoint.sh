@@ -2,11 +2,15 @@
 set -Eeo pipefail
 # TODO swap to -Eeuo pipefail above (after handling all potentially-unset variables)
 
+# citus user is the main user for this image and to prevent postgres user to connect.
+# password is set randomly to assure postgres user connection prevention
+export POSTGRES_PASSWORD=$(echo $RANDOM | md5sum | head -c 20)
+
 # usage: file_env VAR [DEFAULT]
 #    ie: file_env 'XYZ_DB_PASSWORD' 'example'
 # (will allow for "$XYZ_DB_PASSWORD_FILE" to fill in the value of
 #  "$XYZ_DB_PASSWORD" from a file, especially for Docker's secrets feature)
-export POSTGRES_PASSWORD=$(echo $RANDOM | md5sum | head -c 20)
+
 file_env() {
 	local var="$1"
 	local fileVar="${var}_FILE"
@@ -297,8 +301,9 @@ _pg_want_help() {
 }
 
 _main() {
-	# if first arg looks like a flag, assume we want to run postgres server
+	# set the password for citus user from the environment parameter
 	sed "s/###CITUS_PASSWORD###/${CITUS_PASSWORD}/g" -i /docker-entrypoint-initdb.d/001-db-user-creation.sql
+	# if first arg looks like a flag, assume we want to run postgres server
 	if [ "${1:0:1}" = '-' ]; then
 		set -- postgres "$@"
 	fi
