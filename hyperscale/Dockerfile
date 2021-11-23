@@ -57,6 +57,7 @@ COPY hyperscale/pg_hba.conf /pg_hba.conf
 # add health check script
 COPY pg_healthcheck wait-for-manager.sh /
 
+# required for to replace citus user password in the execution of docker-entrypoint.sh
 RUN chown -R postgres:postgres /docker-entrypoint-initdb.d
 
 COPY hyperscale/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
