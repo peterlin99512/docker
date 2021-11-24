@@ -1,7 +1,7 @@
 # This file is auto generated from it's template,
 # see citusdata/tools/packaging_automation/templates/docker/latest/latest.tmpl.dockerfile.
-FROM postgres:14.1
-ARG VERSION=10.2.2
+FROM postgres:12.9
+ARG VERSION=10.0.6
 LABEL maintainer="Citus Data https://citusdata.com" \
       org.label-schema.name="Citus" \
       org.label-schema.description="Scalable PostgreSQL for multi-tenant and real-time workloads" \
@@ -21,16 +21,16 @@ RUN apt-get update \
        ca-certificates \
        curl \
     && curl -s https://install.citusdata.com/community/deb.sh | bash \
-    && apt-get install -y postgresql-$PG_MAJOR-citus-10.2=$CITUS_VERSION \
+    && apt-get install -y postgresql-$PG_MAJOR-citus-10.0=$CITUS_VERSION \
                           postgresql-$PG_MAJOR-hll=2.16.citus-1 \
                           postgresql-$PG_MAJOR-topn=2.4.0 \
-                          postgresql-14-postgis-3 \
-                          postgresql-plperl-14 \
+                          postgresql-12-postgis-3 \
+                          postgresql-plperl-12 \
                           postgresql-contrib \
-                          postgresql-14-partman \
-                          postgresql-14-tdigest \
-                          postgresql-14-mysql-fdw \
-                          postgresql-14-cron \
+                          postgresql-12-partman \
+                          postgresql-12-tdigest \
+                          postgresql-12-mysql-fdw \
+                          postgresql-12-cron \
     && apt-get purge -y --auto-remove curl \
     && rm -rf /var/lib/apt/lists/*
 
@@ -39,6 +39,9 @@ RUN echo "shared_preload_libraries='citus,pg_cron,pg_stat_statements'" >> /usr/s
 
 # set default database name for pg_cron extension
 RUN echo "cron.database_name = 'citus'" >> /usr/share/postgresql/postgresql.conf.sample
+
+# add scam-sha-256 into postgresql.conf.sample to make scram-sha-256 in pg_hba.conf work
+RUN echo "password_encryption = scram-sha-256" >> /usr/share/postgresql/postgresql.conf.sample
 
 # add scripts to run after initdb
 COPY hyperscale/001-db-user-creation.sql /docker-entrypoint-initdb.d/
