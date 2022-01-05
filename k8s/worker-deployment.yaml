@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: pg-citus-worker
+spec:
+  serviceName: "pg-citus-worker"
+  replicas: 3
+  selector:
+    matchLabels:
+      app: citus-worker
+  template:
+    metadata:
+      labels:
+        app: citus-worker
+        citusType: "citus-worker"
+    spec:
+      serviceAccountName: pod-listing-sa
+      containers:
+        - env:
+            - name: PGPASSWORD
+            - name: PGUSER
+              value: postgres
+            - name: POSTGRES_HOST_AUTH_METHOD
+              value: trust
+            - name: POSTGRES_PASSWORD
+            - name: POSTGRES_USER
+              value: postgres
+          image: citusdata/citus:10.2.3
+          name: worker
+          resources: {}
+          volumeMounts:
+            - mountPath: /healthcheck
+              name: healthcheck-volume-storage
+      restartPolicy: Always
+      volumes:
+        - name: healthcheck-volume-storage
+          persistentVolumeClaim:
+            claimName: healthcheck-pv-volume
